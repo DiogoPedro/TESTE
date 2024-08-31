@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Maria Silva",
+    "seniority": "Júnior",
+    "address": {
+      "street": "Rua das Flores",
+      "neighborhood": "Centro",
+      "state": "PE",
+      "cep": "50000-000",
+      "number": 123,
+      "complement": "Apt 101"
+    }
+  },
+  {
+    "name": "João Souza",
+    "seniority": "Pleno",
+    "address": {
+      "street": "Avenida Paulista",
+      "neighborhood": "Bela Vista",
+      "state": "SP",
+      "cep": "01310-100",
+      "number": 456,
+      "complement": "Sala 12"
+    }
+  },
+  {
+    "name": "Carla Ferreira",
+    "seniority": "Sênior",
+    "address": {
+      "street": "Rua das Laranjeiras",
+      "neighborhood": "Centro",
+      "state": "RJ",
+      "cep": "22240-003",
+      "number": 789,
+      "complement": "Cobertura"
+    }
+  },
+  {
+    "name": "Pedro Almeida",
+    "seniority": "Júnior",
+    "address": {
+      "street": "Rua do Comércio",
+      "neighborhood": "Comercial",
+      "state": "BA",
+      "cep": "40000-000",
+      "number": 10,
+      "complement": "Loja A"
+    }
+  }
+]

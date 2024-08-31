@@ -1,0 +1,19 @@
+.btn-rounded {
+  border-radius: 15%;
+}
+
+.btn-circle {
+  border-radius: 50%;
+}
+
+.p-paginator-page,
+.p-paginator-page-start,
+.p-paginator-page-end {
+  border-radius: 50%;
+}
+
+.p-dropdown-items {
+  padding: 0;
+}
+
+/* p-paginator-element p-link p-paginator-page-start p-paginator-page-end p-highlight */
