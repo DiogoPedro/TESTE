@@ -1,13 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>CGV-Advogados</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet" />
+    <style>
+      /* Adiciona estes estilos */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow-x: hidden; /* Impede rolagem horizontal */
+      }
+      #root {
+        height: 100%;
+        width: 100%;
+        position: relative;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div class="h-100 w-100" id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

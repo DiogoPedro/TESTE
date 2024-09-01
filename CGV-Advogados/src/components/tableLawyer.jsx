@@ -2,15 +2,31 @@ import { useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { SelectButton } from "primereact/selectbutton";
 import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
-import lawyers from "../data/lawyers.json";
 import "primeicons/primeicons.css";
+
+//Components
+import ModalLawyer from "./modalLawyer";
+//Models
+import lawyers from "../data/lawyers.json";
+import DeleteLawyer from "./deleteLawyer";
 
 function TableLawyer() {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
   const [products, setProducts] = useState([...lawyers]); // Dados dos advogados
+  const [loading, setLoading] = useState(false);
+  const footer = `Total de ${products ? products.length : 0} advogados.`;
+  const [filters, setFilters] = useState({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  });
+
+  const [sizeOptions] = useState([
+    { label: "Curta", value: "small" },
+    { label: "Média", value: "normal" },
+    { label: "Grande", value: "large" },
+  ]);
+  const [size, setSize] = useState(sizeOptions[1].value);
 
   const columns = [
     { field: "name", header: "Nome do Advogado" },
@@ -23,10 +39,6 @@ function TableLawyer() {
     { field: "address.complement", header: "Complemento" },
   ];
 
-  const [filters, setFilters] = useState({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  });
-
   const onGlobalFilterChange = (e) => {
     const value = e.target.value;
     let _filters = { ...filters };
@@ -37,49 +49,82 @@ function TableLawyer() {
     setGlobalFilterValue(value);
   };
 
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedLawyer, setSelectedLawyer] = useState(null);
+
+  const openCreateModal = () => {
+    setSelectedLawyer(null);
+    setShowModal(true);
+  };
+
+  const openEditModal = (lawyer) => {
+    setSelectedLawyer(lawyer);
+    setShowModal(true);
+  };
+
+  const deleteLawyer = (lawyer) => {
+    setSelectedLawyer(lawyer);
+    setShowDeleteModal(true);
+  };
+
   const renderHeader = () => {
     return (
-      <div className="flex justify-between items-center">
-        <span className="text-xl font-bold">Lista de advogados</span>
-        <div className="d-flex justify-content-between">
-          <div className="">
+      <>
+        <p className="h5">Lista de advogados</p>
+        <div className="d-flex justify-content-between align-items-center">
+          <div className="mt-2">
             <InputText
               value={globalFilterValue}
               onChange={onGlobalFilterChange}
+              style={{ width: "50vw", maxWidth: "27em" }}
               placeholder="Buscar na tabela"
-              className="p-inputtext-sm"
             />
           </div>
-          <Button className="btn-circle" icon="pi pi-refresh" rounded raised />
+          <div className="d-flex align-items-center" style={{ marginInline: "0.5em" }}>
+            <Button onClick={openCreateModal} className="btn-circle" style={{ padding: "0.5em 0.7em 0.5em 0.5em" }}>
+              <i className="pi pi-user-plus" style={{ fontSize: "1.7rem" }}></i>
+            </Button>
+          </div>
         </div>
-      </div>
+      </>
     );
   };
 
   const header = renderHeader();
 
-  const [loading, setLoading] = useState(false);
-
-  const [sizeOptions] = useState([
-    { label: "Curta", value: "small" },
-    { label: "Média", value: "normal" },
-    { label: "Grande", value: "large" },
-  ]);
-  const [size, setSize] = useState(sizeOptions[1].value);
-
-  const footer = `Total de ${products ? products.length : 0} advogados.`;
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <div className="d-flex justify-content-center align-items-center">
+        <Button
+          icon="pi pi-user-edit"
+          className="btn-circle p-button-text p-button-plain mr-1"
+          onClick={() => openEditModal(rowData)}
+        />
+        <Button
+          icon="pi pi-user-minus"
+          className="btn-circle p-button-text p-button-danger"
+          onClick={() => deleteLawyer(rowData)}
+        />
+      </div>
+    );
+  };
 
   return (
-    <div className="flex justify-center items-center">
+    <>
+      <ModalLawyer
+        visible={showModal}
+        visibleSet={setShowModal}
+        lawyerSelected={selectedLawyer}
+        setLawyerSelected={setSelectedLawyer}
+      />
+      <DeleteLawyer
+        visible={showDeleteModal}
+        visibleSet={setShowDeleteModal}
+        lawyerSelected={selectedLawyer}
+        setLawyerSelected={setSelectedLawyer}
+      />
       <div className="card w-full">
-        <div className="flex justify-center items-center mb-4">
-          <SelectButton
-            value={size}
-            onChange={(e) => setSize(e.value)}
-            options={sizeOptions}
-          />
-        </div>
-
         <DataTable
           value={products}
           header={header}
@@ -102,19 +147,19 @@ function TableLawyer() {
           paginator
           emptyMessage="Nenhum dado encontrado."
           rows={5}
-          rowsPerPageOptions={[5, 10, 25, 50]}
-        >
+          rowsPerPageOptions={[5, 10, 25, 50]}>
           {columns.map((col) => (
-            <Column
-              key={col.field}
-              field={col.field}
-              header={col.header}
-              sortable
-            />
+            <Column key={col.field} field={col.field} header={col.header} sortable />
           ))}
+          <Column
+            body={actionBodyTemplate}
+            header="Ações"
+            align="center"
+            bodyStyle={{ textAlign: "center", whiteSpace: "nowrap" }}
+          />
         </DataTable>
       </div>
-    </div>
+    </>
   );
 }
 

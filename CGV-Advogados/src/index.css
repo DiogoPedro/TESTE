@@ -1,14 +1,32 @@
+:root {
+  font-family: "Proxima Nova", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .btn-rounded {
   border-radius: 15%;
 }
 
 .btn-circle {
-  border-radius: 50%;
+  border-radius: 100%;
 }
+
+/* p-dialog-header-icon p-dialog-header-close p-link */
 
 .p-paginator-page,
 .p-paginator-page-start,
-.p-paginator-page-end {
+.p-paginator-page-end,
+.p-dialog-header-close {
   border-radius: 50%;
 }
 
@@ -16,4 +34,6 @@
   padding: 0;
 }
 
-/* p-paginator-element p-link p-paginator-page-start p-paginator-page-end p-highlight */
+.p-datatable-footer {
+  text-align: center;
+}
