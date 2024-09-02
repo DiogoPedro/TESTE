@@ -1,7 +1,7 @@
 const Seniority = {
-  JR: "Júnior",
-  PL: "Pleno",
-  SR: "Sênior",
+  0: "Júnior",
+  1: "Pleno",
+  2: "Sênior",
 };
 
 export default Seniority;

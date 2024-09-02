@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
@@ -6,20 +6,42 @@ import { FilterMatchMode } from "primereact/api";
 import { InputText } from "primereact/inputtext";
 import "primeicons/primeicons.css";
 
-//Components
+// Components
 import ModalLawyer from "./modalLawyer";
-//Models
-import lawyers from "../data/lawyers.json";
 import DeleteLawyer from "./deleteLawyer";
+
+// Models
+import Lawyer from "../models/lawyer";
+
+// Services
+import LawyerService from "../services/lawyerService";
 
 function TableLawyer() {
   const [globalFilterValue, setGlobalFilterValue] = useState("");
-  const [products, setProducts] = useState([...lawyers]); // Dados dos advogados
   const [loading, setLoading] = useState(false);
-  const footer = `Total de ${products ? products.length : 0} advogados.`;
   const [filters, setFilters] = useState({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   });
+
+  const [lawyers, setLawyers] = useState([]);
+  const footer = `Total de ${lawyers ? lawyers.length : 0} advogados.`;
+
+  useEffect(() => {
+    const fetchLawyers = async () => {
+      try {
+        const data = await LawyerService.getAllLawyers();
+        const lawyers = data.map(
+          (lawyerData) => new Lawyer(lawyerData.id, lawyerData.name, lawyerData.seniority, lawyerData.address)
+        );
+        setLawyers(lawyers);
+      } catch (error) {
+        console.error("Error fetching lawyers:", error);
+        setError("Failed to fetch lawyers");
+      }
+    };
+
+    fetchLawyers();
+  }, []);
 
   const [sizeOptions] = useState([
     { label: "Curta", value: "small" },
@@ -29,7 +51,7 @@ function TableLawyer() {
   const [size, setSize] = useState(sizeOptions[1].value);
 
   const columns = [
-    { field: "name", header: "Nome do Advogado" },
+    { field: "name", header: "Nome do Advogado(a)" },
     { field: "seniority", header: "Senioridade" },
     { field: "address.street", header: "Logradouro" },
     { field: "address.neighborhood", header: "Bairro" },
@@ -126,7 +148,7 @@ function TableLawyer() {
       />
       <div className="card w-full">
         <DataTable
-          value={products}
+          value={lawyers}
           header={header}
           footer={footer}
           size={size}

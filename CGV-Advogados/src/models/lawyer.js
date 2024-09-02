@@ -1,32 +1,25 @@
 import Address from "./address";
 import Seniority from "./seniority";
+import State from "./state";
 
 class Lawyer {
-  constructor(name, seniority, address) {
+  constructor(id, name, seniority, address) {
+    this.id = id;
     this.name = name;
-    this.seniority = Seniority[seniority];
-    this.address =
-      address instanceof Address ? address : new Address(...address);
+    this.seniority = Seniority[seniority]; // Mapeia o enum
+    this.address = {
+      street: address.street,
+      neighborhood: address.neighborhood,
+      state: State[address.state], // Mapeia o enum
+      zip: address.zip,
+      number: address.number,
+      complement: address.complement,
+    };
   }
 
   validateSeniority() {
     return Object.values(Seniority).includes(this.seniority);
   }
-
-  // updateLawyer({ name, seniority, address }) {
-  //   if (name) this.name = name;
-  //   if (seniority && Seniority[seniority])
-  //     this.seniority = Seniority[seniority];
-  //   if (address) this.address.updateAddress(address);
-  // }
-
-  // getDetails() {
-  //   return {
-  //     name: this.name,
-  //     seniority: this.seniority,
-  //     address: this.address.getFullAddress(),
-  //   };
-  // }
 }
 
 export default Lawyer;

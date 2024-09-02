@@ -14,18 +14,6 @@ class Address {
     const cepRegex = /^[0-9]{5}-[0-9]{3}$/;
     return cepRegex.test(this.cep);
   }
-
-  //   updateAddress(AddressAtt) {
-  //     if (AddressAtt.street) this.street = AddressAtt.street;
-  //     if (AddressAtt.neighborhood) this.neighborhood = AddressAtt.neighborhood;
-  //     if (AddressAtt.state) this.state = AddressAtt.state;
-  //     if (AddressAtt.cep) this.cep = AddressAtt.cep;
-  //     if (AddressAtt.number) this.number = AddressAtt.number;
-  //     if (AddressAtt.state && State[AddressAtt.state])
-  //       this.state = AddressAtt.state;
-  //     if (AddressAtt.complement !== undefined)
-  //       this.complement = AddressAtt.complement;
-  //   }
 }
 
 export default Address;

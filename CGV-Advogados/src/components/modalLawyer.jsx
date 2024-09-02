@@ -4,6 +4,7 @@ import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import InputMask from "react-input-mask";
+import LawyerService from "../services/lawyerService";
 import Seniority from "../models/seniority";
 import State from "../models/state";
 
@@ -56,13 +57,36 @@ function ModalLawyer({ visible, visibleSet, lawyerSelected, setLawyerSelected })
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (validate()) {
-      // Implementar a lógica de salvar aqui
-      setIsVisible(false);
+      try {
+        const lawyerData = {
+          name: name,
+          seniority: Seniority[seniority], // Mapeia o valor da senioridade para o enum correto
+          address: {
+            street: address.street,
+            neighborhood: address.neighborhood,
+            state: State[address.state], // Mapeia o valor do estado para o enum correto
+            zip: address.zip,
+            number: address.number,
+            complement: address.complement,
+          },
+        };
+
+        if (lawyerSelected) {
+          // Se estiver editando um advogado existente
+          await LawyerService.updateLawyer(lawyerSelected.id, lawyerData);
+        } else {
+          // Se estiver criando um novo advogado
+          await LawyerService.createLawyer(lawyerData);
+        }
+
+        CloseModal();
+      } catch (error) {
+        console.error("Erro ao salvar o advogado:", error);
+      }
     }
   };
-
   return (
     <Dialog
       header="Adicionar um novo advogado:"
