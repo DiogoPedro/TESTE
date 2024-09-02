@@ -85,6 +85,28 @@ class LawyerService {
 
   static async updateLawyer(id, lawyer) {
     try {
+      //Copia desnecessario criar uma função nova.
+      const seniorityKey = this.findKeyByValue(Seniority, lawyer.seniority);
+      const addressStateKey = this.findKeyByValue(State, lawyer.address.state);
+
+      if (seniorityKey !== undefined) {
+        lawyer.seniority = parseInt(seniorityKey, 10);
+      }
+
+      if (addressStateKey !== undefined) {
+        lawyer.address.state = parseInt(addressStateKey, 10);
+      }
+
+      //Zip only numbers
+      lawyer.address.zip = lawyer.address.zip.replace(/\D/g, "");
+
+      const isValid = validate(lawyer);
+
+      if (!isValid) {
+        console.error("Validation errors:", validate.errors);
+        throw new Error("Validation failed");
+      }
+
       const response = await fetch(`${this.LAWYER_URL}/${id}`, {
         method: "PUT",
         headers: {

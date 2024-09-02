@@ -1,20 +1,24 @@
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import React, { useEffect } from "react";
+import LawyerService from "../services/lawyerService";
 
 function DeleteLawyer({ visible, visibleSet, lawyerSelected, setLawyerSelected }) {
-  const DeleteLawyerSelected = () => {};
+  const DeleteLawyerSelected = async () => {
+    await LawyerService.deleteLawyer(lawyerSelected.id);
+    setLawyerSelected(null);
+    visibleSet(false);
+  };
   const CloseModal = () => visibleSet(false);
 
   useEffect(() => {
-    console.log(lawyerSelected);
     if (lawyerSelected) {
     }
   }, [lawyerSelected]);
 
   return (
     <Dialog
-      header="Atenção, deseja realmente apagar?"
+      header="Atenção!"
       visible={visible}
       style={{ width: "35vw", height: "45vh", minWidth: "20em", minHeight: "17em" }}
       onHide={CloseModal}>
@@ -22,7 +26,7 @@ function DeleteLawyer({ visible, visibleSet, lawyerSelected, setLawyerSelected }
         <div>
           <p>
             Nome do Advogado(a) selecionado:{" "}
-            {lawyerSelected != null ? lawyerSelected.name + " com nível: " + lawyerSelected.seniority : ""}
+            {lawyerSelected != null ? lawyerSelected.name + " com nível " + lawyerSelected.seniority + "." : "."}
           </p>
           <p>Estado: {lawyerSelected != null ? lawyerSelected.address.state : ""}</p>
         </div>

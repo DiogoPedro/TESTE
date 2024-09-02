@@ -26,23 +26,6 @@ function TableLawyer() {
   const [lawyers, setLawyers] = useState([]);
   const footer = `Total de ${lawyers ? lawyers.length : 0} advogados.`;
 
-  useEffect(() => {
-    const fetchLawyers = async () => {
-      try {
-        const data = await LawyerService.getAllLawyers();
-        const lawyers = data.map(
-          (lawyerData) => new Lawyer(lawyerData.id, lawyerData.name, lawyerData.seniority, lawyerData.address)
-        );
-        setLawyers(lawyers);
-      } catch (error) {
-        console.error("Error fetching lawyers:", error);
-        setError("Failed to fetch lawyers");
-      }
-    };
-
-    fetchLawyers();
-  }, []);
-
   const [sizeOptions] = useState([
     { label: "Curta", value: "small" },
     { label: "Média", value: "normal" },
@@ -74,6 +57,27 @@ function TableLawyer() {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedLawyer, setSelectedLawyer] = useState(null);
+
+  const fetchLawyers = async () => {
+    try {
+      const data = await LawyerService.getAllLawyers();
+      const lawyers = data.map(
+        (lawyerData) => new Lawyer(lawyerData.id, lawyerData.name, lawyerData.seniority, lawyerData.address)
+      );
+      setLawyers(lawyers);
+    } catch (error) {
+      console.error("Error fetching lawyers:", error);
+      setError("Failed to fetch lawyers");
+    }
+  };
+
+  useEffect(() => {
+    fetchLawyers();
+  }, [showDeleteModal]);
+
+  useEffect(() => {
+    fetchLawyers();
+  }, [showModal]);
 
   const openCreateModal = () => {
     setSelectedLawyer(null);
